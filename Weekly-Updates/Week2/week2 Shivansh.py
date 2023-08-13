@@ -35,7 +35,7 @@ columns = [f'LM_{i}_X' for i in range(33)] + [f'LM_{i}_Y' for i in range(33)] + 
 bone_df = pd.DataFrame(bone_data, columns=columns)
 
 # Save the DataFrame to an Excel file
-excel_filename = 'C:/Users/Pravin/Desktop/bone_data.xlsx'
+excel_filename = 'your location.xlsx'
 
 # Create an Excel writer using openpyxl
 with pd.ExcelWriter(excel_filename, engine='openpyxl') as writer:
