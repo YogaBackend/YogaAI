@@ -9,7 +9,7 @@ def calculate_angle(a, b, c):
     c = np.array(c)  # End
     
     radians = np.arctan2(c[1] - b[1], c[0] - b[0]) - np.arctan2(a[1] - b[1], a[0] - b[0])
-    angle = np.abs(radians * 180.0 / np.pi)
+    angle = np.abs(radians * 180.0 / np.pi) 
     
     if angle > 180.0:
         angle = 360 - angle
@@ -24,7 +24,7 @@ mp_pose = mp.solutions.pose
 cap = cv2.VideoCapture(0)
 
 # Initialize the pose instance with confidence thresholds
-with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+with mp_pose.Pose(min_detection_confidence=0.8, min_tracking_confidence=0.5) as pose:
     bone_data = []  # Store bone data
     angle_data = []  # Store angle data
     
@@ -72,6 +72,9 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             left_knee_angle = calculate_angle(left_hip, left_knee, left_ankle)
             right_knee_angle = calculate_angle(right_hip, right_knee, right_ankle)
 
+            # Append angle data to the list
+            angle_data.append([left_elbow_angle, right_elbow_angle, left_knee_angle, right_knee_angle])
+
             # Visualize angles on the image
             cv2.putText(image, f'Left Elbow: {left_elbow_angle:.2f}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             cv2.putText(image, f'Right Elbow: {right_elbow_angle:.2f}', (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
@@ -79,7 +82,17 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
             cv2.putText(image, f'Right Knee: {right_knee_angle:.2f}', (50, 140), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
         except:
-            pass
+            # Handle the case when landmarks are not visible
+            left_elbow_angle = 'N/A'
+            right_elbow_angle = 'N/A'
+            left_knee_angle = 'N/A'
+            right_knee_angle = 'N/A'
+
+            # Visualize "N/A" on the image
+            cv2.putText(image, 'Left Elbow: N/A', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.putText(image, 'Right Elbow: N/A', (50, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.putText(image, 'Left Knee: N/A', (50, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            cv2.putText(image, 'Right Knee: N/A', (50, 140), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
         # Render pose landmarks on the image
         mp_drawing.draw_landmarks(
