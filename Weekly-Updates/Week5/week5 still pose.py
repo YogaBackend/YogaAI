@@ -133,7 +133,7 @@ if __name__ == '__main__':
     num_bones = 33  # 0 to 32 bones
 
     # Read data from the Excel sheet
-    excel_filename = 'C:/Users/Pravin/Desktop/heatmap generation/merged_data.xlsx'
+    excel_filename = 'location of the file'
     bone_df = pd.read_excel(excel_filename)
 
     # Create a queue to communicate pose status between processes
